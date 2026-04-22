@@ -5,7 +5,7 @@ DATE: 4/13/2026
 '''
 
 """
-This code reccomends a song by The Weeknd based on the user's mood. 
+This code reccomends a song by The Weeknd based on the user's mood. I chose to use lists over dictionaries because in this project, compiling songs together into 3 different categories works better in a list than as a dictionary
 Leave one blank line.  The rest of this docstring should contain an
 overall description of the program.
 """
