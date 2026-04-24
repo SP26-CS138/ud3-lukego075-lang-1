@@ -5,41 +5,12 @@ DATE: 4/13/2026
 '''
 
 """
-This code reccomends a song by The Weeknd based on the user's mood. I chose to use lists over dictionaries because in this project, compiling songs together into 3 different categories works better in a list than as a dictionary
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the program.
+This code recommends a song by The Weeknd based on the user's mood.
+The user can choose a mood category and optionally view their song history.
 """
 
-##########################################
-# IMPORTS:
-# 
-##########################################
-# <replace this line with import statement(s)>
 import random
 
-##########################################
-# FUNCTIONS:
-def get_mood_choice():
-    while True:
-        mood = input("What type of mood are you interested in? Sad, Upbeat, or Moody: ").strip().lower()
-        if mood in SONGS_BY_MOOD:
-            return mood
-        print("Please enter Sad, Upbeat, or Moody.")
-
-def main():
-    mood = get_mood_choice()
-    song = random.choice(SONGS_BY_MOOD[mood])
-    print(f"Your song by the Weeknd based on your mood is: {song}")
-
-##########################################
-# Mood choice allows the user to choose between three moods: sad, upbeat, and moody.
-#the program then selects a song at random from the correstponding list of songs for that mood
-
-
-##########################################
-# MAIN PROGRAM:
-##########################################
-# <replace this line with your main program>
 SONGS_BY_MOOD = {
     "sad": [
         "Privilege",
@@ -103,7 +74,7 @@ SONGS_BY_MOOD = {
         "Given Up On Me",
         "The Abyss",
     ],
-    "moody":[
+    "moody": [
         "High for This",
         "What You Need",
         "House of Balloons / Glass Table Girls",
@@ -137,19 +108,60 @@ SONGS_BY_MOOD = {
         "One Of the Girls",
     ],
 }
+
+HISTORY_FILE = "weeknd_song_history.txt"
+
+
+def get_mood_choice():
+    while True:
+        mood = input("What type of mood are you interested in? Sad, Upbeat, or Moody: ").strip().lower()
+        if mood in SONGS_BY_MOOD:
+            return mood
+        print("Please enter Sad, Upbeat, or Moody.")
+
+
+def choose_song_by_mood(mood):
+    song = random.choice(SONGS_BY_MOOD[mood])
+    save_song_to_history(mood, song)
+    return song
+
+
 def show_song():
     mood = get_mood_choice()
-    song = random.choice(SONGS_BY_MOOD[mood])
-    print(f"Your song by the Weeknd based on your mood is: {song}")
+    song = choose_song_by_mood(mood)
+    print(f"Your song by The Weeknd based on your mood is: {song}")
+
+
+def save_song_to_history(mood, song):
+    with open(HISTORY_FILE, "a", encoding="utf-8") as history_file:
+        history_file.write(f"Mood: {mood.title()} | Song: {song}\n")
+
+
+def show_history():
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as history_file:
+            history = history_file.read().strip()
+    except FileNotFoundError:
+        print("No song history has been saved yet.")
+        return
+
+    if history:
+        print("\nSong History")
+        print(history)
+    else:
+        print("No song history has been saved yet.")
+
 
 def return_to_menu():
     input("\nPress Enter to return to the main menu...")
+
 
 def main():
     while True:
         print("\nMain Menu")
         print("1. Get a song")
-        print("2. Exit")
+        print("2. View song history")
+        print("3. Exit")
 
         choice = input("Choose an option: ").strip()
 
@@ -157,10 +169,14 @@ def main():
             show_song()
             return_to_menu()
         elif choice == "2":
+            show_history()
+            return_to_menu()
+        elif choice == "3":
             print("Goodbye!")
             break
         else:
-            print("Please enter 1 or 2.")
+            print("Please enter 1, 2, or 3.")
+
 
 if __name__ == "__main__":
     main()
